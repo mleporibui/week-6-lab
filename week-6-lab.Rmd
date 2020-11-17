@@ -1,0 +1,114 @@
+---
+title: "Week 6 Lab"
+author: "Michelle Lepori-Bui"
+date: "11/16/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(palmerpenguins)
+library(ggpubr)
+library(broom)
+```
+
+## Intro to Linear Regression
+
+First create two sample vectors.
+
+```{r}
+set.seed(1414)
+gp_1 <- sample.int(20, size = 15, replace = TRUE)
+
+set.seed(1424)
+gp_2 <- sample.int(30, size = 15, replace = TRUE)
+
+```
+
+Is there evidence for a significant difference in ranks between the populations from which gp_1 and gp_2 where drawn?
+
+Visualize data with base r 
+
+```{r}
+hist(gp_1)
+hist(gp_2)
+```
+
+Not normally distributed
+small sample size
+Medians are better metric 
+
+Mann-Whitney U
+
+```{r}
+my_mwu <- wilcox.test(gp_1, gp_2)
+```
+
+### Simple linear regression
+
+A. Look at it!
+
+```{r}
+ggplot(data = penguins, aes(x = flipper_length_mm, y = body_mass_g)) +
+  geom_point()
+```
+
+
+```{r}
+# Linear model, stored as penguin_lm:
+penguin_lm <- lm(body_mass_g ~flipper_length_mm, data = penguins)
+
+# Return the complete overview:
+summary(penguin_lm)
+```
+
+
+
+Use broom::tidy() to access model outputs more easily
+
+```{r}
+penguin_lm_tidy <- broom::tidy(penguin_lm)
+
+# get the intercept:
+penguin_int <- penguin_lm_tidy$estimate[1]
+penguin_int
+```
+
+```{r}
+# flipper_length coefficient:
+penguin_coef <- penguin_lm_tidy$estimate[2]
+penguin_coef
+```
+
+```{r}
+# metrics at a glance:
+
+penguin_lm_out <- broom::glance(penguin_lm)
+penguin_lm_out
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
